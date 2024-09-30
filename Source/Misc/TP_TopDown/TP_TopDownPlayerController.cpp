@@ -34,6 +34,9 @@ void ATP_TopDownPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Pressed, this, &ATP_TopDownPlayerController::OnSetDestinationPressed);
 	InputComponent->BindAction("SetDestination", IE_Released, this, &ATP_TopDownPlayerController::OnSetDestinationReleased);
 
+	InputComponent->BindAxis("Sprint", this, &ATP_TopDownPlayerController::Sprint);
+	
+
 	InputComponent->BindAction("Slice", IE_Pressed, this, &ATP_TopDownPlayerController::OnSlice);
 }
 
@@ -135,3 +138,22 @@ void ATP_TopDownPlayerController::OnSlice()
 		NewComp->AddImpulse(Direction * 600.f, NAME_None, true);
 	}
 }
+
+void ATP_TopDownPlayerController::Sprint(float Axis)
+{
+	ATP_TopDownCharacter* TP_Player = Cast<ATP_TopDownCharacter>(GetPawn());
+	if (TP_Player)
+	{
+		if (Axis > 0)
+		{
+			TP_Player->OnSprint();
+			return;
+		}
+		
+		TP_Player->OffSprint();
+		
+	}
+
+}
+
+

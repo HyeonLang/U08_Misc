@@ -26,6 +26,9 @@ protected:
 	void OnSetDestinationReleased();
 
 	void OnSlice();
+
+	void Sprint(float Axis);
+	
 };
 
 
