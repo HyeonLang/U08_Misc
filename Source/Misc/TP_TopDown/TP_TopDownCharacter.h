@@ -37,6 +37,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* CursorToWorld;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UPostProcessComponent* PostProcessComp;
+
 	UPROPERTY(VisibleAnywhere, Category = "Smear")
 	UMaterialInterface* OriginMaterial;
 
@@ -45,6 +48,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Smear")
 	UMaterialInstanceDynamic* SmearMaterialDynamic;
+
+	//UPROPERTY(EditDefaultsOnly, Category = "SphereMask")
+	//UMaterialInterface* SphereMaskMaterial;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Smear")
 	float SmearWeight;
