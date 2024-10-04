@@ -15,7 +15,9 @@ public:
 	~CButtonCommand();
 public:
 	virtual void RegisterCommands() override;
-
+private:
+	void OnLoadMeshButtonClicked();
 public:
 	TSharedPtr<FUICommandInfo> LoadMeshButtonID;
+	TSharedPtr<FUICommandList> LoadMeshCommandList;
 };

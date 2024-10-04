@@ -25,7 +25,8 @@ public class Tore : ModuleRules
 			"Slate",
 			"SlateCore",
 			"UnrealEd",
-			"EditorStyle"
+			"EditorStyle",
+			"Projects"
 		});
 		
 	}
