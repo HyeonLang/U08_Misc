@@ -31,16 +31,15 @@ CIconStyle::CIconStyle()
 {
 	StyleSet = MakeShareable(new FSlateStyleSet(StyleSetName));
 
-	FString Name = StyleSetName.ToString() + "." + "LoadMeshIcon";
 
 	FString Path = IPluginManager::Get().FindPlugin("Tore")->GetBaseDir();
 	Path /= "Resources"; // 경로 전용 연산자 (언리얼 )
 	StyleSet->SetContentRoot(Path); // 지정한 경로부터 검색
 
-	FSlateImageBrush* ImageBrush = new FSlateImageBrush(Path / "Icon.png", FVector2D(48));
-	StyleSet->Set(FName(Name), ImageBrush);
-
-	LoadMeshIcon = FSlateIcon(StyleSetName, FName(Name));
+	RegisterIcon(LoadMeshIcon, "LoadMesh", Path / "Icon.png");
+	RegisterIcon(OpenViewerIcon, "OpenViewer", Path / "Icon2.png");
+	
+	
 
 	FSlateStyleRegistry::RegisterSlateStyle(*StyleSet.Get());
 }
@@ -53,4 +52,14 @@ CIconStyle::~CIconStyle()
 	{
 		StyleSet.Reset();
 	}
+}
+
+void CIconStyle::RegisterIcon(FSlateIcon& OutIcon, const FString& PostFix, const FString& ImagePath, const FVector2D& Size)
+{
+	FString Name = StyleSetName.ToString() + "." + PostFix;
+	FSlateImageBrush* ImageBrush = new FSlateImageBrush(ImagePath, Size);
+	StyleSet->Set(FName(Name), ImageBrush);
+
+	OutIcon = FSlateIcon(StyleSetName, FName(Name));
+
 }

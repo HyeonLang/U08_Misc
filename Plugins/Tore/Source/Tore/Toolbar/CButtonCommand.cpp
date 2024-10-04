@@ -6,14 +6,14 @@
 CButtonCommand::CButtonCommand()
 	:TCommands("Tore", FText::FromString("My Command"), NAME_None, FEditorStyle::GetStyleSetName())
 {
-	LoadMeshCommandList = MakeShareable(new FUICommandList());
+	CommandList = MakeShareable(new FUICommandList());
 }
 
 CButtonCommand::~CButtonCommand()
 {
-	if (LoadMeshCommandList.IsValid())
+	if (CommandList.IsValid())
 	{
-		LoadMeshCommandList.Reset();
+		CommandList.Reset();
 	}
 }
 
@@ -21,12 +21,21 @@ CButtonCommand::~CButtonCommand()
 void CButtonCommand::RegisterCommands()
 {
 	UI_COMMAND(LoadMeshButtonID, "LoadMesh", "Load Mesh Data.", EUserInterfaceActionType::Button, FInputChord());
+	UI_COMMAND(OpenViewerButtonID, "OpenViewer", "Open My Viewer.", EUserInterfaceActionType::Button, FInputChord());
 	
-	LoadMeshCommandList->MapAction(
+	CommandList->MapAction
+	(
 		LoadMeshButtonID, 
 		FExecuteAction::CreateRaw(this, &CButtonCommand::OnLoadMeshButtonClicked),
 		FCanExecuteAction()
-		);
+	);
+
+	CommandList->MapAction
+	(
+		OpenViewerButtonID,
+		FExecuteAction::CreateRaw(this, &CButtonCommand::OnOpenViewerButtonClicked),
+		FCanExecuteAction()
+	);
 }
 #undef LOCTEXT_NAMESPACE
 
@@ -41,4 +50,11 @@ void CButtonCommand::OnLoadMeshButtonClicked()
 	{
 		GLog->Log(Brush->GetResourceName().ToString());
 	}
+}
+
+void CButtonCommand::OnOpenViewerButtonClicked()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s"), TEXT(__FUNCTION__));
+
+	
 }

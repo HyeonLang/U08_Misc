@@ -62,7 +62,7 @@ void ACMiku::SetLightDirectionToMaterials(FVector InDirection)
 	{
 		for (const FVectorParameterValue& VectorParams : MikuMeterial->VectorParameterValues)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::White, VectorParams.ParameterInfo.Name.ToString());
+			//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::White, VectorParams.ParameterInfo.Name.ToString());
 			
 			if (VectorParams.ParameterInfo.Name == "LightDirection")
 			{

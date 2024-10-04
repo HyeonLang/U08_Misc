@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "D:/UE_4.25/Engine/Plugins/Runtime/OpenXR/Source/OpenXRHMD/Private/OpenXRHMD_RenderBridge.cpp"
+//#include "D:/UE_4.25/Engine/Plugins/Runtime/OpenXR/Source/OpenXRHMD/Private/OpenXRHMD_RenderBridge.cpp"
 
 class FSlateStyleSet;
 
@@ -16,10 +16,14 @@ public:
 	~CIconStyle();
 
 private:
+	void RegisterIcon(FSlateIcon& OutIcon, const FString& PostFix, const FString& ImagePath, const FVector2D& Size = FVector2D(48));
+
+private:
 	static TSharedPtr<CIconStyle> Instance;
 
 public:
 	FSlateIcon LoadMeshIcon;
+	FSlateIcon OpenViewerIcon;
 
 private:
 	const FName StyleSetName;
