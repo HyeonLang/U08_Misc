@@ -28,7 +28,6 @@ protected:
 	void OnSlice();
 
 	void Sprint(float Axis);
-	
 };
 
 

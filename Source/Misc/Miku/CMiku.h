@@ -19,10 +19,9 @@ public:
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
-public:	
 
-protected:
 #if WITH_EDITOR
+protected:
 	void SetLightDirectionToMaterials(FVector InDirection);
 #endif
 
@@ -37,6 +36,5 @@ protected:
 	FVector LightDirection;
 
 private:
-	TArray<UMaterialInstanceConstant*> MikuMeterials;
-
+	TArray<UMaterialInstanceConstant*> MikuMaterials;
 };

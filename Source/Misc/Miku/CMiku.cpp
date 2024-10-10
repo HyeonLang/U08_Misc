@@ -3,7 +3,6 @@
 
 ACMiku::ACMiku()
 {
-
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("/Game/AMiku/Mesh/Appearance_Miku"));
 	if (MeshAsset.Succeeded())
 	{
@@ -27,14 +26,13 @@ void ACMiku::OnConstruction(const FTransform& Transform)
 		TArray<FMaterialElementData*> ReadDatas;
 		MaterialData->GetAllRows("", ReadDatas);
 
-		if ((int32)RenderType >= ReadDatas.Num())
+		if ((int32)RenderType >= (int32)ReadDatas.Num())
 		{
 			UE_LOG(LogTemp, Error, TEXT("RenderType is out of size"));
 			return;
 		}
 
-		MikuMeterials.Empty();
-
+		MikuMaterials.Empty();
 		if (ReadDatas[(int32)RenderType] && ReadDatas[(int32)RenderType]->DataAsset)
 		{
 			UCMaterialData* SelectedDataAsset = ReadDatas[(int32)RenderType]->DataAsset;
@@ -43,30 +41,34 @@ void ACMiku::OnConstruction(const FTransform& Transform)
 			{
 				if (SelectedDataAsset->Materials[i])
 				{
-					MikuMeterials.Add(SelectedDataAsset->Materials[i]);
+					MikuMaterials.Add(SelectedDataAsset->Materials[i]);
+
 					GetMesh()->SetMaterial(i, SelectedDataAsset->Materials[i]);
 				}
 			}
 		}
 	}
 
-	SetLightDirectionToMaterials(LightDirection);
-}
 
+	SetLightDirectionToMaterials(LightDirection);
+
+}
 
 
 #if WITH_EDITOR
 void ACMiku::SetLightDirectionToMaterials(FVector InDirection)
 {
-	for (UMaterialInstanceConstant* MikuMeterial : MikuMeterials)
+	for (UMaterialInstanceConstant* Material : MikuMaterials)
 	{
-		for (const FVectorParameterValue& VectorParams : MikuMeterial->VectorParameterValues)
+		//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::White, GetNameSafe(Material));
+
+		for (const FVectorParameterValue& VectorParams : Material->VectorParameterValues)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 2, FColor::White, VectorParams.ParameterInfo.Name.ToString());
-			
+
 			if (VectorParams.ParameterInfo.Name == "LightDirection")
 			{
-				MikuMeterial->SetVectorParameterValueEditorOnly(VectorParams.ParameterInfo, InDirection);
+				Material->SetVectorParameterValueEditorOnly(VectorParams.ParameterInfo, InDirection);
 			}
 		}
 	}

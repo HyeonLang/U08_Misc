@@ -5,7 +5,6 @@
 #include "TP_TopDownCharacter.generated.h"
 
 class UMaterialInstanceDynamic;
-class UMaterialInterface;
 
 UCLASS(Blueprintable)
 class ATP_TopDownCharacter : public ACharacter
@@ -19,9 +18,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-
 	virtual void Tick(float DeltaSeconds) override;
 
+public:
 	FORCEINLINE class UDecalComponent* GetCursorToWorld() { return CursorToWorld; }
 
 	void OnSprint();
@@ -49,10 +48,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Smear")
 	UMaterialInstanceDynamic* SmearMaterialDynamic;
 
-	//UPROPERTY(EditDefaultsOnly, Category = "SphereMask")
-	//UMaterialInterface* SphereMaskMaterial;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Smear")
 	float SmearWeight;
+
+	//UPROPERTY(EditDefaultsOnly, Category = "SphereMask")
+	//UMaterialInterface* SphereMaskMaterial;
 };
 

@@ -10,18 +10,19 @@ ACHasDetailButton::ACHasDetailButton()
 #if WITH_EDITOR
 void ACHasDetailButton::ChangeColor()
 {
+	TArray<UMaterialInterface*> Materials = MeshComp->GetMaterials();
+
 	if (!MeshComp->GetStaticMesh() || MeshComp->GetNumMaterials() < 1)
 	{
 		return;
 	}
-
-	TArray<UMaterialInterface*> Materials = MeshComp->GetMaterials();
 
 	FLinearColor RandomColor = FLinearColor::MakeRandomColor();
 
 	for (const auto& Material : Materials)
 	{
 		UMaterialInstanceConstant* MaterialInstance = Cast<UMaterialInstanceConstant>(Material);
+
 		for (const auto& VectorParams : MaterialInstance->VectorParameterValues)
 		{
 			if (VectorParams.ParameterInfo.Name.Compare("MyColor") == 0)
@@ -31,5 +32,4 @@ void ACHasDetailButton::ChangeColor()
 		}
 	}
 }
-
 #endif

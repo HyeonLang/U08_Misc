@@ -46,14 +46,18 @@ ATP_TopDownCharacter::ATP_TopDownCharacter()
 	CursorToWorld->DecalSize = FVector(16.0f, 32.0f, 32.0f);
 	CursorToWorld->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
 
-	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComp"));
-	PostProcessComp->SetupAttachment(RootComponent);
-	
-
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	SmearWeight = 0.05f;
+
+	PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcessComp"));
+	PostProcessComp->SetupAttachment(RootComponent);
+
+	/*if (SphereMaskMaterial)
+	{
+		PostProcessComp->Settings.AddBlendable(SphereMaskMaterial, 1.f);
+	}*/
 }
 
 void ATP_TopDownCharacter::BeginPlay()
@@ -61,6 +65,7 @@ void ATP_TopDownCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	OriginMaterial = GetMesh()->GetMaterial(0);
+
 	if (ensure(SmearMaterial))
 	{
 		SmearMaterialDynamic = UMaterialInstanceDynamic::Create(SmearMaterial, this);
@@ -86,20 +91,19 @@ void ATP_TopDownCharacter::Tick(float DeltaSeconds)
 }
 
 void ATP_TopDownCharacter::OnSprint()
-{	
-	GetCharacterMovement()->MaxWalkSpeed = 1500.f;
+{
 	GetMesh()->SetMaterial(0, SmearMaterialDynamic);
+	GetCharacterMovement()->MaxWalkSpeed = 2000.f;
 
 	SmearMaterialDynamic->SetVectorParameterValue("Direction", -GetVelocity().GetSafeNormal());
 	SmearMaterialDynamic->SetScalarParameterValue("Length", GetVelocity().Size() * SmearWeight);
-		
-	
 }
 
 void ATP_TopDownCharacter::OffSprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
-	
 	GetMesh()->SetMaterial(0, OriginMaterial);
-	
+	GetCharacterMovement()->MaxWalkSpeed = 600;
+
+	SmearMaterialDynamic->SetVectorParameterValue("Direction", FVector::ZeroVector);
+	SmearMaterialDynamic->SetScalarParameterValue("Length", 0.f);
 }

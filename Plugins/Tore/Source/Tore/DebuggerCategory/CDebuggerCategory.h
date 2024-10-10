@@ -6,7 +6,7 @@
 struct FCollectData
 {
 	FString Name;
-	FVector Location;
+	FVector Loation;
 	FVector Forward;
 };
 

@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "CIconStyle.h"
 #include "Styling/SlateStyle.h"
 #include "Styling/SlateStyleRegistry.h"
@@ -27,19 +24,16 @@ void CIconStyle::Shutdown()
 }
 
 CIconStyle::CIconStyle()
-	:StyleSetName("ToreStyle")
+	: StyleSetName("ToreStyle")
 {
 	StyleSet = MakeShareable(new FSlateStyleSet(StyleSetName));
 
-
 	FString Path = IPluginManager::Get().FindPlugin("Tore")->GetBaseDir();
-	Path /= "Resources"; // 경로 전용 연산자 (언리얼 )
-	StyleSet->SetContentRoot(Path); // 지정한 경로부터 검색
+	Path /= "Resources";
+	StyleSet->SetContentRoot(Path);
 
 	RegisterIcon(LoadMeshIcon, "LoadMesh", Path / "Icon.png");
 	RegisterIcon(OpenViewerIcon, "OpenViewer", Path / "Icon2.png");
-	
-	
 
 	FSlateStyleRegistry::RegisterSlateStyle(*StyleSet.Get());
 }
@@ -54,12 +48,11 @@ CIconStyle::~CIconStyle()
 	}
 }
 
-void CIconStyle::RegisterIcon(FSlateIcon& OutIcon, const FString& PostFix, const FString& ImagePath, const FVector2D& Size)
+void CIconStyle::RegisterIcon(FSlateIcon& OutIcon, const FString& Postfix, const FString& ImagePath, const FVector2D& Size)
 {
-	FString Name = StyleSetName.ToString() + "." + PostFix;
+	FString Name = StyleSetName.ToString() + "." + Postfix;
 	FSlateImageBrush* ImageBrush = new FSlateImageBrush(ImagePath, Size);
 	StyleSet->Set(FName(Name), ImageBrush);
 
 	OutIcon = FSlateIcon(StyleSetName, FName(Name));
-
 }
