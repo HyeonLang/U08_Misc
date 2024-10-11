@@ -1,4 +1,6 @@
 #include "CAssetViewer.h"
+#include "SCViewport.h"
+#include "AdvancedPreviewSceneModule.h"
 
 TSharedPtr<CAssetViewer> CAssetViewer::Instance = nullptr;
 const static FName AppId = TEXT("ToreAssetViewer");
@@ -48,6 +50,16 @@ FLinearColor CAssetViewer::GetWorldCentricTabColorScale() const
 
 void CAssetViewer::OpenWindow_Internal(UObject* Property)
 {
+	Viewport = SNew(SCViewport);
+
+	FAdvancedPreviewSceneModule& AdvancedPreview = FModuleManager::LoadModuleChecked<FAdvancedPreviewSceneModule>("AdvancedPreviewScene");
+	PreviewSceneSettings = AdvancedPreview.CreateAdvancedPreviewSceneSettingsWidget(Viewport->GetScene());
+
+	FPropertyEditorModule& PropertyEditor = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	FDetailsViewArgs Args(false, false, true, FDetailsViewArgs::ENameAreaSettings::ObjectsUseNameArea);
+	DetailsView = PropertyEditor.CreateDetailView(Args);
+	DetailsView->SetObject(Property);
+
 	TSharedRef<FTabManager::FLayout> Layout = FTabManager::NewLayout("ToreLayout")
 		->AddArea
 		(
@@ -117,14 +129,31 @@ void CAssetViewer::RegisterTabSpawners(const TSharedRef<FTabManager>& InTabManag
 	FAssetEditorToolkit::RegisterTabSpawners(InTabManager);
 
 	TabManager->RegisterTabSpawner(ViewportTabId, FOnSpawnTab::CreateSP(this, &CAssetViewer::Spawn_ViewportTab));
+	TabManager->RegisterTabSpawner(PreviewTabId, FOnSpawnTab::CreateSP(this, &CAssetViewer::Spawn_PreviewSceneSettingsTab));
+	TabManager->RegisterTabSpawner(DetailsTabId, FOnSpawnTab::CreateSP(this, &CAssetViewer::Spawn_DetailsViewTab));
 }
 
 TSharedRef<SDockTab> CAssetViewer::Spawn_ViewportTab(const FSpawnTabArgs& InArgs)
 {
 	return SNew(SDockTab)
 		[
-			SNew(SButton)
-			.Text(FText::FromString("MyButton"))
+			Viewport.ToSharedRef()
 		];
+}
+
+TSharedRef<SDockTab> CAssetViewer::Spawn_PreviewSceneSettingsTab(const FSpawnTabArgs& InArgs)
+{
+	return SNew(SDockTab)
+		[
+			PreviewSceneSettings.ToSharedRef()
+		];
+}
+
+TSharedRef<SDockTab> CAssetViewer::Spawn_DetailsViewTab(const FSpawnTabArgs& InArgs)
+{
+	return  SNew(SDockTab)
+		[
+			DetailsView.ToSharedRef()
+		];;
 }
 
